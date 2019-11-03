@@ -20,6 +20,7 @@ UseNewDefaultFonts( 1 ) // since version 2.0.22 we can use nicer default fonts
 //--VARIABLES--//
 speed = 1
 diry = 10
+lives = 3
 
 CreateImageColor(1, 150, 150, 150, 255)
 CreateImageColor(2, 255, 255, 255, 255)
@@ -47,6 +48,9 @@ obstacley = 0
 SetSpritePosition(2, obstaclex, obstacley)
 
 do
+  PrintC("Lives: ")
+  Print(lives)
+  
   //'A' and 'D' key controls for player
   if GetRawKeyState(65) //'A' key
 	  playerx = playerx - 20
@@ -75,7 +79,35 @@ do
   endif
   SetSpritePosition(2, obstaclex, obstacley)
   
-  
+  if GetSpriteCollision(1, 2)
+	  lives = lives - 1
+	  obstaclew = Random(100, 330)
+	  obstacleh = Random(100, 330)
+	  SetSpriteSize(2, obstaclew, obstacleh)
+	  obstaclex = Random(0, GetVirtualWidth() - GetSpriteWidth(2))
+	  obstacley = 0
+	  diry = diry + 1
+	  if diry > 45
+		  diry = 45
+	  endif
+  endif
 
+  if lives < 1
+	Print("You Lose!")
+	SetSpritePosition(1, GetVirtualWidth(), GetVirtualHeight())
+	SetSpritePOsition(2, GetVirtualWidth(), GetVirtualHeight())
+	Print("Play again? Yes(Y)  No(N)")
+	if GetRawKeyState(89)
+		lives = 3
+		SetSpritePosition(1, playerx, playery)
+		SetSpritePosition(2, obstaclex, obstacley)
+		diry = 10
+	else
+		if GetRawKeyState(78)
+			end
+		endif
+	endif
+  endif
+  
     Sync()
 loop
